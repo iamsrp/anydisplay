@@ -10,7 +10,7 @@ from   .      import Display
 
 class _PIL(Display):
     """
-    The base class for thre PIL-based displays.
+    The base class for the PIL-based displays.
     """
     def __init__(self,
                  width  : int,
@@ -132,8 +132,8 @@ class _MiniPiTFT(_PIL):
             dc      =digitalio.DigitalInOut(board.D25),
             rst     =None,
             baudrate=64000000, # Max is 24mhz
-            width   =height,   # Oriented below
-            height  =width,
+            width   =height,   # Reoriented when we...
+            height  =width,    #  ...call image() below
             x_offset=x_offset,
             y_offset=y_offset,
         )
@@ -168,3 +168,44 @@ class MiniPiTFT13(_MiniPiTFT):
     """
     def __init__(self):
         super().__init__(240, 240, 0, 80, 180)
+
+
+class I2CPiOLED(_PIL):
+    """
+    The display for the monochrome Adafruit i2c Pi OLED display.
+
+    See::
+        https://learn.adafruit.com/adafruit-pioled-128x32-mini-oled-for-raspberry-pi/usage
+        pip3 install adafruit-circuitpython-ssd1306
+    """
+    def __init__(self,
+                 dither : bool = True):
+        """
+        :param dither: Whether to dither when converting to monochrome. Without
+                       it you get a very flat transform. With it you get noise
+                       "artifacts" from frame to frame.
+        """
+        super().__init__(128, 32)
+
+        from   board             import SCL, SDA
+        import adafruit_ssd1306
+        import busio
+
+        i2c = busio.I2C(SCL, SDA)
+        self._display = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c)
+
+        if dither:
+            self._dither = Image.FLOYDSTEINBERG
+        else:
+            self._dither = Image.NONE
+
+
+    def show(self) -> None:
+        mono = self._image.convert('1', dither=self._dither)
+        self._display.image(mono)
+        self._display.show()
+
+
+    def quit(self) -> None:
+        super().quit()
+        self._display.reset()
