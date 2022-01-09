@@ -117,8 +117,11 @@ class UnicornScrollHatMini(_UnicornHat):
         (w, h) = self._display.get_shape()
         if 0 <= x < w and 0 <= y < h:
             # Okay to set. We need to turn the colours into a brightness since
-            # the HAT is grey-scale only.
-            v = math.sqrt(r**2 + g**2 + b**2)
+            # the HAT is grey-scale only. We use ITU-R 601-2 luma transform for
+            # this.
+            v = (r * 0.299 +
+                 g * 0.587 +
+                 b * 0.114)
 
             # And set
             self._display.pixel(x, y, min(max(v, 0.0), 1.0))
