@@ -30,6 +30,9 @@ try:
     h = canvas.height - 1
     c = 3
 
+    # Pixel size
+    s = int(min(w / 10.0, h / 10.0)) + 1
+
     # Framerate
     fps  = 100
     rate = 1 / fps
@@ -94,7 +97,7 @@ try:
                 vb[i] = -vb[i]
 
             # Display the (big) pixel
-            canvas.set(x[i], y[i], r[i], g[i], b[i], 5.0)
+            canvas.set(x[i], y[i], r[i], g[i], b[i], s)
         canvas.show()
         last = time.time()
 
