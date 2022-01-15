@@ -170,6 +170,24 @@ class MiniPiTFT13(_MiniPiTFT):
         super().__init__(240, 240, 0, 80, 180)
 
 
+class MiniPiTFT13Bonnet(_MiniPiTFT):
+    """
+    Display class for the Adafruit TFT 1.3" Bonnet.
+
+    See:
+        https://learn.adafruit.com/adafruit-mini-pitft-135x240-color-tft-add-on-for-raspberry-pi    
+    """
+    def __init__(self):
+        super().__init__(240, 240, 0, 80, 180)
+
+        # Turn on the backlight
+        import board
+        from   digitalio import DigitalInOut
+        backlight = DigitalInOut(board.D26)
+        backlight.switch_to_output()
+        backlight.value = True
+
+
 class I2CPiOLED(_PIL):
     """
     The display for the monochrome Adafruit i2c Pi OLED display.
