@@ -175,7 +175,7 @@ class MiniPiTFT13Bonnet(_MiniPiTFT):
     Display class for the Adafruit TFT 1.3" Bonnet.
 
     See:
-        https://learn.adafruit.com/adafruit-mini-pitft-135x240-color-tft-add-on-for-raspberry-pi    
+        https://learn.adafruit.com/adafruit-1-3-color-tft-bonnet-for-raspberry-pi
     """
     def __init__(self):
         super().__init__(240, 240, 0, 80, 180)
